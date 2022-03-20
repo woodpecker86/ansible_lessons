@@ -1,0 +1,22 @@
+---
+- name: Change grub
+  hosts: nodes
+
+  tasks:
+  - name: Change grub config
+    lineinfile:
+      path: /etc/default/grub
+      search_string: "net.ifnames=0 biosdevname=0"
+      insertbefore: "^GRUB_DISABLE_RECOVERY"
+      line: 'GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"'
+
+  - name: Rewrite grub
+    command: grub2-mkconfig
+    ignore_errors: yes
+    register: result
+
+  - name: Check result of grub rewriting
+    debug:
+      msg: "Grub has been successfully rewritten"
+    when: result.rc == 0
+...

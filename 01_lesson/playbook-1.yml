@@ -1,0 +1,42 @@
+---
+- name: my Web server
+  hosts: nodes
+
+  tasks:
+  - name: Install apache
+    package:
+      name: httpd
+      state: present
+
+  - name: Start apache
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: Pause for 2 seconds, waiting for apache to start
+    pause:
+      seconds: 2
+
+  - name: Populate service facts
+    service_facts:
+
+  - name: Check Apache state
+    debug:
+      msg: "Apache service is {{ansible_facts.services['httpd.service'].state}} and {{ansible_facts.services['httpd.service'].status}}"
+
+  - name: Create index.html
+    copy:
+      content: "Welcome to my web server"
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Open http port through firewall
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+      immediate: True
+...

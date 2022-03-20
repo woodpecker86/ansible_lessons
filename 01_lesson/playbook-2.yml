@@ -1,0 +1,22 @@
+---
+- name: delete my Web server
+  hosts: nodes
+
+  tasks:
+  - name: Close http port through firewall
+    firewalld:
+      service: http
+      permanent: yes
+      state: disabled
+      immediate: True
+
+  - name: Delete index.html
+    file:
+      path: /var/www/html/index.html
+      state: absent
+
+  - name: Uninstall apache
+    package:
+      name: httpd
+      state: absent
+...
