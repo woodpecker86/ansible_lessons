@@ -10,13 +10,13 @@
         name: "{{ item.name }}"
         comment: "{{ item.name }}@example.com"
         home: "/home/{{ item.name }}_dir"
-        password: "{{ item.pass | password_hash('sha512') }}"
+        password: "{{ item.pass }}"
         state: present
         update_password: on_create
       loop:
         - name: Alice
-          pass: "{{ Alice_secret }}"
+          pass: "{{ Alice_secret | string | password_hash('sha512') }}"
         - name: Bob
-          pass: "{{ Bob_secret }}"
+          pass: "{{ Bob_secret | string | password_hash('sha512') }}"
         - name: Carol
-          pass: "{{ Carol_secret }}"
+          pass: "{{ Carol_secret | string | password_hash('sha512') }}"
