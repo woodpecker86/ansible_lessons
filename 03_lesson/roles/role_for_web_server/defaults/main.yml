@@ -1,0 +1,3 @@
+---
+# defaults file for role_for_web_server
+system_manager: Carol@example.com

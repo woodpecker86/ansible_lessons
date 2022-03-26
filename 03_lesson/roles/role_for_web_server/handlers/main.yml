@@ -1,0 +1,6 @@
+---
+# handlers file for role_for_web_server
+- name: Restart firewall
+  service:
+    name: firewalld
+    state: restarted

@@ -1,0 +1,28 @@
+---
+# tasks file for role_for_web_server
+- name: Install apache
+  package:
+    name: httpd
+    state: present
+
+- name: Start apache
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: Create index.html
+  template:
+    src: templates/index.j2
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Open http/https ports through firewall
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop: "{{ firewall_services }}"
+  notify: Restart firewall

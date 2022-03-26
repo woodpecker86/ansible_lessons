@@ -1,0 +1,53 @@
+---
+- name: Enable FTP
+  hosts: nodes
+  vars:
+    anonymous_enable: "YES"
+    local_enable: "YES"
+    write_enable: "YES"
+    anon_upload_enable: "YES"
+    anonymous_no_password: "YES"
+
+  pre_tasks:
+  - name: Install vsftpd
+    package:
+      name: vsftpd
+      state: present
+
+  tasks:
+  - name: use template to configure FTP
+    template:
+      src: vsftpd.j2
+      dest: /etc/vsftpd/vsftpd.conf
+    notify: Restart vsftpd
+
+  - name: Open ftp ports
+    firewalld:
+      service: ftp
+      permanent: yes
+      state: enabled
+      immediate: True
+
+  - name: Set ftpd_anon_write flag ON and enable it to persist on reboot
+    seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+
+  - name: Create dir for upload
+    file:
+      path: /var/ftp/pub/upload
+      state: directory
+      owner: ftp
+      group: ftp
+      setype: "public_content_rw_t"
+      seuser: "system_u"
+      mode: 750
+
+  handlers:
+  - name: Restart vsftpd
+    service:
+      name: vsftpd
+      state: restarted
+      enabled: yes
+...

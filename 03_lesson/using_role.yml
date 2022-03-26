@@ -1,0 +1,15 @@
+---
+- name: Use the role that I made
+  hosts: nodes
+
+  roles:
+  - role: role_for_web_server
+    system_manager: alice@example.com
+
+  post_tasks:
+  - name: Populate service facts
+    service_facts:
+
+  - name: Check Apache state
+    debug:
+      msg: "Apache service is {{ansible_facts.services['httpd.service'].state}} and {{ansible_facts.services['httpd.service'].status}}"

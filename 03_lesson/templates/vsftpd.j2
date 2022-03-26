@@ -1,0 +1,14 @@
+listen=YES
+anonymous_enable={{ anonymous_enable }}
+no_anon_password={{ anonymous_no_password }}
+anon_root=/var/ftp/pub
+local_enable={{ local_enable }}
+write_enable={{ write_enable }}
+anon_upload_enable={{ anon_upload_enable }}
+anon_mkdir_write_enable={{ anon_upload_enable }}
+ftpd_banner=This is a FTP server on {{ ansible_host }}
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+pam_service_name=vsftpd
+userlist_enable=YES

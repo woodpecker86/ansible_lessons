@@ -1,0 +1,4 @@
+control.example.com
+
+[nodes]
+node[1:2].example.com
